@@ -2231,4 +2231,9 @@
 
   <!-- Quick Settings tile defaults -->
   <java-symbol type="string" name="config_defaultQuickSettingsTiles" />
+
+  <!-- Config.xml entries -->
+  <java-symbol type="string" name="config_deviceKeyHandlerLib" />
+  <java-symbol type="string" name="config_deviceKeyHandlerClass" />
+
 </resources>
