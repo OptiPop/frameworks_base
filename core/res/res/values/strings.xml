@@ -5207,4 +5207,11 @@
     <string name="permlab_changePhoneBlacklist">change phone blacklist</string>
     <!-- [CHAR LIMIT=NONE] Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changePhoneBlacklist">Allows an app to change the phone numbers that are blocked for incoming calls or messages.</string>
+
+    <!-- Privacy Guard -->
+    <string name="permlab_changePrivacyGuardState">Enable or disable privacy guard</string>
+    <string name="permdesc_changePrivacyGuardState">Allows the app to change whether another app runs with privacy guard. When an app is running with Privacy Guard, it will not have access to personal data such as contacts, call logs, or messages.</string>
+    <string name="privacy_guard_notification">Privacy guard active</string>
+    <string name="privacy_guard_notification_detail"><xliff:g id="app">%1$s</xliff:g> will not be able to access personal data</string>
+    <string name="privacy_guard_custom_notification_detail"><xliff:g id="app">%1$s</xliff:g> will not be able to access custom permissions</string>
 </resources>
