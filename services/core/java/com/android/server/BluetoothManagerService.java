@@ -20,12 +20,14 @@ import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.IBluetooth;
+import android.bluetooth.IQBluetooth;
 import android.bluetooth.IBluetoothGatt;
 import android.bluetooth.IBluetoothCallback;
 import android.bluetooth.IBluetoothHeadset;
 import android.bluetooth.IBluetoothManager;
 import android.bluetooth.IBluetoothManagerCallback;
 import android.bluetooth.IBluetoothProfileServiceConnection;
+import android.bluetooth.IQBluetoothManagerCallback;
 import android.bluetooth.IBluetoothStateChangeCallback;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -36,6 +38,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.UserInfo;
+import android.app.AppOpsManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -84,6 +87,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private static final int MESSAGE_DISABLE = 2;
     private static final int MESSAGE_REGISTER_ADAPTER = 20;
     private static final int MESSAGE_UNREGISTER_ADAPTER = 21;
+    private static final int MESSAGE_REGISTER_Q_ADAPTER = 22;
+    private static final int MESSAGE_UNREGISTER_Q_ADAPTER = 23;
     private static final int MESSAGE_REGISTER_STATE_CHANGE_CALLBACK = 30;
     private static final int MESSAGE_UNREGISTER_STATE_CHANGE_CALLBACK = 31;
     private static final int MESSAGE_BLUETOOTH_SERVICE_CONNECTED = 40;
@@ -112,6 +117,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
     private static final int SERVICE_IBLUETOOTH = 1;
     private static final int SERVICE_IBLUETOOTHGATT = 2;
+    private static final int SERVICE_IBLUETOOTHQ = 3;
 
     private final Context mContext;
 
@@ -121,8 +127,10 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private String mName;
     private final ContentResolver mContentResolver;
     private final RemoteCallbackList<IBluetoothManagerCallback> mCallbacks;
+    private final RemoteCallbackList<IQBluetoothManagerCallback> mQCallbacks;
     private final RemoteCallbackList<IBluetoothStateChangeCallback> mStateChangeCallbacks;
     private IBluetooth mBluetooth;
+    private IQBluetooth mQBluetooth;
     private IBluetoothGatt mBluetoothGatt;
     private boolean mBinding;
     private boolean mUnbinding;
@@ -140,6 +148,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
     private final BluetoothHandler mHandler;
     private int mErrorRecoveryRetryCounter;
     private final int mSystemUiUid;
+    private boolean mIsBluetoothServiceConnected = false;
 
     // Save a ProfileServiceConnections object for each of the bound
     // bluetooth profile services
@@ -220,6 +229,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
         mContext = context;
         mBluetooth = null;
+        mQBluetooth = null;
         mBinding = false;
         mUnbinding = false;
         mEnable = false;
@@ -231,6 +241,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         mErrorRecoveryRetryCounter = 0;
         mContentResolver = context.getContentResolver();
         mCallbacks = new RemoteCallbackList<IBluetoothManagerCallback>();
+        mQCallbacks = new RemoteCallbackList<IQBluetoothManagerCallback>();
         mStateChangeCallbacks = new RemoteCallbackList<IBluetoothStateChangeCallback>();
         IntentFilter filter = new IntentFilter(Intent.ACTION_BOOT_COMPLETED);
         filter.addAction(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED);
@@ -365,6 +376,22 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         mHandler.sendMessage(msg);
     }
 
+    public IQBluetooth registerQAdapter(IQBluetoothManagerCallback callback){
+        Message msg = mHandler.obtainMessage(MESSAGE_REGISTER_Q_ADAPTER);
+        msg.obj = callback;
+        mHandler.sendMessage(msg);
+        synchronized(mConnection) {
+            return mQBluetooth;
+        }
+    }
+
+    public void unregisterQAdapter(IQBluetoothManagerCallback callback) {
+        mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM,
+                                                "Need BLUETOOTH permission");
+        Message msg = mHandler.obtainMessage(MESSAGE_UNREGISTER_Q_ADAPTER);
+        msg.obj = callback;
+        mHandler.sendMessage(msg);
+    }
     public void registerStateChangeCallback(IBluetoothStateChangeCallback callback) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM,
                                                 "Need BLUETOOTH permission");
@@ -503,6 +530,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 }
                 if (DBG) Log.d(TAG, "Sending unbind request.");
                 mBluetooth = null;
+                mQBluetooth = null;
                 //Unbind
                 mContext.unbindService(mConnection);
                 mUnbinding = false;
@@ -511,6 +539,11 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 mUnbinding=false;
             }
         }
+    }
+
+    public IQBluetooth getQBluetooth() {
+        // sync protection
+        return mQBluetooth;
     }
 
     public IBluetoothGatt getBluetoothGatt() {
@@ -700,7 +733,6 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             msg.obj = this;
             mHandler.sendMessageDelayed(msg, TIMEOUT_BIND_MS);
         }
-    }
 
     private void sendBluetoothStateCallback(boolean isUp) {
         int n = mStateChangeCallbacks.beginBroadcast();
@@ -750,6 +782,39 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             }
             mCallbacks.finishBroadcast();
         }
+    }
+
+    /**
+     * Inform QBluetoothAdapter instances that QAdapter service is up
+     */
+    private void sendQBluetoothServiceUpCallback() {
+        if (DBG) Log.d(TAG,"Calling onQBluetoothServiceUp callbacks");
+        int n = mQCallbacks.beginBroadcast();
+        Log.d(TAG,"Broadcasting onQBluetoothServiceUp() to " + n + " receivers.");
+        for (int i=0; i <n;i++) {
+            try {
+                mQCallbacks.getBroadcastItem(i).onQBluetoothServiceUp(mQBluetooth);
+            }  catch (RemoteException e) {
+                Log.e(TAG, "Unable to call onQBluetoothServiceUp() on callback #" + i, e);
+            }
+        }
+        mQCallbacks.finishBroadcast();
+    }
+    /**
+     * Inform BluetoothAdapter instances that Adapter service is down
+     */
+    private void sendQBluetoothServiceDownCallback() {
+        if (DBG) Log.d(TAG,"Calling onQBluetoothServiceDown callbacks");
+        int n = mQCallbacks.beginBroadcast();
+        Log.d(TAG,"Broadcasting onQBluetoothServiceDown() to " + n + " receivers.");
+        for (int i=0; i <n;i++) {
+            try {
+                mQCallbacks.getBroadcastItem(i).onQBluetoothServiceDown();
+            }  catch (RemoteException e) {
+                Log.e(TAG, "Unable to call onQBluetoothServiceDown() on callback #" + i, e);
+            }
+        }
+            mQCallbacks.finishBroadcast();
     }
     public String getAddress() {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM,
@@ -822,6 +887,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 // } else if (className.getClassName().equals(IBluetoothGatt.class.getName())) {
             } else if (className.getClassName().equals("com.android.bluetooth.gatt.GattService")) {
                 msg.arg1 = SERVICE_IBLUETOOTHGATT;
+            } else if (className.getClassName().equals("com.android.bluetooth.btservice.QAdapterService")) {
+                msg.arg1 = SERVICE_IBLUETOOTHQ;
+                Log.e(TAG, "Bluetooth Q service connected: " + className.getClassName());
             } else {
                 Log.e(TAG, "Unknown service connected: " + className.getClassName());
                 return;
@@ -839,6 +907,8 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 msg.arg1 = SERVICE_IBLUETOOTH;
             } else if (className.getClassName().equals("com.android.bluetooth.gatt.GattService")) {
                 msg.arg1 = SERVICE_IBLUETOOTHGATT;
+            } else if (className.getClassName().equals("com.android.bluetooth.btservice.QAdapterService")) {
+                msg.arg1 = SERVICE_IBLUETOOTHQ;
             } else {
                 Log.e(TAG, "Unknown service disconnected: " + className.getClassName());
                 return;
@@ -983,11 +1053,26 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                     Log.d(TAG,"Added callback: " +  (callback == null? "null": callback)  +":" +added );
                 }
                     break;
+
+                case MESSAGE_REGISTER_Q_ADAPTER:
+                {
+                    IQBluetoothManagerCallback callback = (IQBluetoothManagerCallback) msg.obj;
+                    boolean added = mQCallbacks.register(callback);
+                    Log.d(TAG,"Q Added callback: " +  (callback == null? "null": callback)  +":" +added );
+                }
+                    break;
                 case MESSAGE_UNREGISTER_ADAPTER:
                 {
                     IBluetoothManagerCallback callback = (IBluetoothManagerCallback) msg.obj;
                     boolean removed = mCallbacks.unregister(callback);
                     Log.d(TAG,"Removed callback: " +  (callback == null? "null": callback)  +":" + removed);
+                    break;
+                }
+                case MESSAGE_UNREGISTER_Q_ADAPTER:
+                {
+                    IQBluetoothManagerCallback callback = (IQBluetoothManagerCallback) msg.obj;
+                    boolean removed = mQCallbacks.unregister(callback);
+                    Log.d(TAG,"Q Removed callback: " +  (callback == null? "null": callback)  +":" + removed);
                     break;
                 }
                 case MESSAGE_REGISTER_STATE_CHANGE_CALLBACK:
@@ -1032,10 +1117,19 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 {
                     if (DBG) Log.d(TAG,"MESSAGE_BLUETOOTH_SERVICE_CONNECTED: " + msg.arg1);
 
+                    mIsBluetoothServiceConnected = true;
+
                     IBinder service = (IBinder) msg.obj;
                     synchronized(mConnection) {
                         if (msg.arg1 == SERVICE_IBLUETOOTHGATT) {
                             mBluetoothGatt = IBluetoothGatt.Stub.asInterface(service);
+                            break;
+                        } // else must be SERVICE_IBLUETOOTH
+
+                        if (msg.arg1 == SERVICE_IBLUETOOTHQ) {
+                            mQBluetooth = IQBluetooth.Stub.asInterface(service);
+                            Log.d(TAG,"mQBluetooth: " + mQBluetooth);
+                            sendQBluetoothServiceUpCallback();
                             break;
                         } // else must be SERVICE_IBLUETOOTH
 
@@ -1130,6 +1224,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                 case MESSAGE_BLUETOOTH_SERVICE_DISCONNECTED:
                 {
                     Log.e(TAG, "MESSAGE_BLUETOOTH_SERVICE_DISCONNECTED: " + msg.arg1);
+
+                    mIsBluetoothServiceConnected = false;
+
                     synchronized(mConnection) {
                         if (msg.arg1 == SERVICE_IBLUETOOTH) {
                             // if service is unbinded already, do nothing and return
@@ -1137,6 +1234,9 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                             mBluetooth = null;
                         } else if (msg.arg1 == SERVICE_IBLUETOOTHGATT) {
                             mBluetoothGatt = null;
+                            break;
+                        } else if (msg.arg1 == SERVICE_IBLUETOOTHQ) {
+                            mQBluetooth = null;
                             break;
                         } else {
                             Log.e(TAG, "Bad msg.arg1: " + msg.arg1);
@@ -1155,6 +1255,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
 
                     if (!mConnection.isGetNameAddressOnly()) {
                         sendBluetoothServiceDownCallback();
+                        sendQBluetoothServiceDownCallback();
 
                         // Send BT state broadcast to update
                         // the BT icon correctly
@@ -1242,6 +1343,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         bluetoothStateChangeHandler(BluetoothAdapter.STATE_TURNING_OFF,
                                                     BluetoothAdapter.STATE_OFF);
                         sendBluetoothServiceDownCallback();
+                        sendQBluetoothServiceDownCallback();
                         synchronized (mConnection) {
                             if (mBluetooth != null) {
                                 mBluetooth = null;
@@ -1392,12 +1494,17 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
                         Intent i = new Intent(IBluetoothGatt.class.getName());
                         doBind(i, mConnection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT,
                                 UserHandle.CURRENT);
+
+                        Intent iqc = new Intent(IQBluetooth.class.getName());
+                        doBind(iqc, mConnection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT,
+                                UserHandle.CURRENT);
                     }
                 } else {
                     //If Bluetooth is off, send service down event to proxy objects, and unbind
                     if (!isUp && canUnbindBluetoothService()) {
                         unbindAllBluetoothProfileServices();
                         sendBluetoothServiceDownCallback();
+                        sendQBluetoothServiceDownCallback();
                         unbindAndFinish();
                     }
                 }
@@ -1497,9 +1604,12 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         waitForOnOff(false, true);
 
         sendBluetoothServiceDownCallback();
+        sendQBluetoothServiceDownCallback();
         synchronized (mConnection) {
             if (mBluetooth != null) {
                 mBluetooth = null;
+                if(mQBluetooth!=null)
+                    mQBluetooth=null;
                 //Unbind
                 mContext.unbindService(mConnection);
             }
