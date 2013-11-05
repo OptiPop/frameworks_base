@@ -18,6 +18,7 @@
 //#define LOG_NDEBUG 0
 
 #include <androidfw/ByteBucketArray.h>
+#define char16_t uint16_t
 #include <androidfw/ResourceTypes.h>
 #include <androidfw/TypeWrappers.h>
 #include <utils/Atomic.h>
