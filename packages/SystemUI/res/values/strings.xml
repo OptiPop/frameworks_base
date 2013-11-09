@@ -918,4 +918,8 @@
 
     <!-- Hide quick settings tile confirmation button -->
     <string name="quick_settings_reset_confirmation_button">Hide</string>
+
+    <!-- Screenshot delete -->
+    <string name="screenshot_delete_action">Delete</string>
+    <string name="screenshot_delete_confirmation">Screenshot deleted.</string>
 </resources>
