@@ -213,10 +213,14 @@ interface IAudioService {
     int setHdmiSystemAudioSupported(boolean on);
 
     boolean isHdmiSystemAudioSupported();
-
-           String registerAudioPolicy(in AudioPolicyConfig policyConfig,
+    String registerAudioPolicy(in AudioPolicyConfig policyConfig,
                     in IAudioPolicyCallback pcb, boolean hasFocusListener);
     oneway void unregisterAudioPolicyAsync(in IAudioPolicyCallback pcb);
 
-           int setFocusPropertiesForPolicy(int duckingBehavior, in IAudioPolicyCallback pcb);
+    int setFocusPropertiesForPolicy(int duckingBehavior, in IAudioPolicyCallback pcb);
+    void setRemoteControlClientBrowsedPlayer();
+
+    void getRemoteControlClientNowPlayingEntries();
+
+    void setRemoteControlClientPlayItem(long uid, int scope);
 }
