@@ -737,7 +737,7 @@ final class WifiDisplayController implements DumpUtils.Dump {
             Slog.i(TAG, "Listening for RTSP connection on " + iface
                     + " from Wifi display: " + mConnectedDevice.deviceName);
 
-            mRemoteDisplay = RemoteDisplay.listen(iface, new RemoteDisplay.Listener() {
+            RemoteDisplay.Listener rdListener = new RemoteDisplay.Listener() {
                 @Override
                 public void onDisplayConnected(Surface surface,
                         int width, int height, int flags, int session) {
@@ -776,7 +776,19 @@ final class WifiDisplayController implements DumpUtils.Dump {
                         handleConnectionFailure(false);
                     }
                 }
-            }, mHandler);
+            };
+
+            try {
+                mRemoteDisplay = RemoteDisplay.listen(iface, rdListener, mHandler);
+            } catch (IllegalArgumentException e) {
+                Slog.e(TAG, "Unable to listen on iface = " + iface + ": " + e.toString());
+                handleConnectionFailure(false);
+                return;
+            } catch (IllegalStateException e) {
+                Slog.e(TAG, "Unable to listen on iface = " + iface + ": " + e.toString());
+                handleConnectionFailure(false);
+                return;
+            }
 
             // Use extended timeout value for certification, as some tests require user inputs
             int rtspTimeout = mWifiDisplayCertMode ?
