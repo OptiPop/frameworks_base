@@ -3307,7 +3307,13 @@ public final class Settings {
          */
         public static final String HEADS_UP_NOTIFCATION_DECAY = "heads_up_notification_decay";
 
-	/**
+        /**
+         * Enable/Disable screenshot sound
+         * @hide
+         */
+        public static final String SCREENSHOT_SOUND = "screenshot_sound";
+
+        /**
          * Whether "None" mode will act as "Silent"
          * Effectively allowing alarms to always use the alarm stream volume when true.
          * @hide
