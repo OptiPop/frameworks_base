@@ -199,6 +199,17 @@ final class ProcessList {
             FOREGROUND_APP_ADJ, VISIBLE_APP_ADJ, PERCEPTIBLE_APP_ADJ,
             BACKUP_APP_ADJ, CACHED_APP_MIN_ADJ, CACHED_APP_MAX_ADJ
     };
+
+    // These are the low-end OOM level limits for 32bit 1 GB RAM
+    private final int[] mOomMinFreeLow32Bit = new int[] {
+            8192, 12288, 16384,
+            24576, 28672, 32768
+    };
+    // These are the high-end OOM level limits for 32bit 1 GB RAM
+    private final int[] mOomMinFreeHigh32Bit = new int[] {
+            49152, 61440, 73728,
+            86016, 98304, 122880
+    };
     // These are the low-end OOM level limits.  This is appropriate for an
     // HVGA or smaller phone with less than 512MB.  Values are in KB.
     private final int[] mOomMinFreeLow = new int[] {
@@ -267,7 +278,12 @@ final class ProcessList {
             Slog.i("XXXXXX", "minfree_adj=" + minfree_adj + " minfree_abs=" + minfree_abs);
         }
 
-        if (Build.SUPPORTED_64_BIT_ABIS.length > 0) {
+        // We've now baked in the increase to the basic oom values above, since
+        // they seem to be useful more generally for devices that are tight on
+        // memory than just for 64 bit.  This should probably have some more
+        // tuning done, so not deleting it quite yet...
+        final boolean is64bit = Build.SUPPORTED_64_BIT_ABIS.length > 0;
+        if (is64bit) {
             // Increase the high min-free levels for cached processes for 64-bit
             mOomMinFreeHigh[4] = 225000;
             mOomMinFreeHigh[5] = 325000;
@@ -276,6 +292,17 @@ final class ProcessList {
         for (int i=0; i<mOomAdj.length; i++) {
             int low = mOomMinFreeLow[i];
             int high = mOomMinFreeHigh[i];
+            if (is64bit) {
+                Slog.i("XXXXXX", "choosing minFree values for 64 Bit");
+                // Increase the high min-free levels for cached processes for 64-bit
+                if (i == 4) high = (high*3)/2;
+                else if (i == 5) high = (high*7)/4;
+
+            } else {
+                Slog.i("XXXXXX", "choosing minFree values for 32 Bit");
+                low = mOomMinFreeLow32Bit[i];
+                high = mOomMinFreeHigh32Bit[i];
+            }
             mOomMinFree[i] = (int)(low + ((high-low)*scale));
         }
 
