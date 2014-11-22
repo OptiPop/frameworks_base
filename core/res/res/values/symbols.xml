@@ -2160,6 +2160,7 @@
 
   <!-- Advanced power menu -->
   <java-symbol type="string" name="global_action_reboot" />
+  <java-symbol type="string" name="global_action_screenshot" />
   <java-symbol type="string" name="reboot_system" />
   <java-symbol type="string" name="reboot_progress" />
   <java-symbol type="string" name="reboot_confirm" />
@@ -2167,6 +2168,7 @@
   <java-symbol type="array" name="shutdown_reboot_actions" />
   <java-symbol type="drawable" name="ic_lock_settings" />
   <java-symbol type="drawable" name="ic_lock_power_reboot" />
+  <java-symbol type="drawable" name="ic_lock_power_screenshot" />
 
   <!-- Back button long-press kill -->
   <java-symbol type="integer" name="config_backKillTimeout" />

@@ -1817,6 +1817,7 @@
     <string-array translatable="false" name="config_globalActionsList">
         <item>power</item>
         <item>reboot</item>
+        <item>screenshot</item>
         <item>users</item>
         <item>settings</item>
         <item>lockdown</item>
