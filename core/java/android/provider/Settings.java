@@ -3023,6 +3023,12 @@ public final class Settings {
          */
         public static final String EGG_MODE = "egg_mode";
 
+         /**
+         * Recents Show/Hide Search Bar
+         * @hide
+         */
+        public static final String RECENTS_SHOW_HIDE_SEARCH_BAR = "recents_show_hide_search_bar";
+
         /**
          * Boolean value on whether to show weather in the statusbar
 	 * @hide
