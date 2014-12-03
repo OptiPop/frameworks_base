@@ -24,14 +24,18 @@ import android.animation.ValueAnimator;
 import android.app.ActivityManagerNative;
 import android.app.StatusBarManager;
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.UserHandle;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -187,6 +191,9 @@ public class NavigationBarView extends LinearLayout {
         getIcons(res);
 
         mBarTransitions = new NavigationBarTransitions(this);
+
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observe();
     }
 
     public BarTransitions getBarTransitions() {
@@ -432,6 +439,8 @@ public class NavigationBarView extends LinearLayout {
         getImeSwitchButton().setOnClickListener(mImeSwitcherClickListener);
 
         updateRTLOrder();
+
+        repositionNavBar(mContext.getContentResolver());
     }
 
     public boolean isVertical() {
@@ -466,6 +475,8 @@ public class NavigationBarView extends LinearLayout {
         updateTaskSwitchHelper();
 
         setNavigationIconHints(mNavigationIconHints, true);
+
+        repositionNavBar(mContext.getContentResolver());
     }
 
     private void updateTaskSwitchHelper() {
@@ -494,6 +505,7 @@ public class NavigationBarView extends LinearLayout {
 
         postCheckForInvalidLayout("sizeChanged");
         super.onSizeChanged(w, h, oldw, oldh);
+        repositionNavBar(mContext.getContentResolver());
     }
 
     private void notifyVerticalChangedListener(boolean newVertical) {
@@ -507,6 +519,80 @@ public class NavigationBarView extends LinearLayout {
         super.onConfigurationChanged(newConfig);
         updateRTLOrder();
         updateTaskSwitchHelper();
+        repositionNavBar(mContext.getContentResolver());
+    }
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.Global.getUriFor(
+                    Settings.Global.NAV_BAR_POSITION),
+                    false, this, UserHandle.USER_ALL);
+            update();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            repositionNavBar(resolver);
+        }
+    }
+
+    public void repositionNavBar(ContentResolver resolver) {
+        if (mCurrentView != null)
+        {
+            int navBarPosition = Settings.Global.getInt(resolver,
+                Settings.Global.NAV_BAR_POSITION, 0);
+            Log.i(TAG, "repositionNavBar(): position=" + navBarPosition);
+
+            View leftSpace1 = mCurrentView.findViewById(R.id.left_space_1);
+            View leftSpace2 = mCurrentView.findViewById(R.id.left_space_2);
+            View leftSpace3 = mCurrentView.findViewById(R.id.left_space_3);
+            View leftSpace4 = mCurrentView.findViewById(R.id.left_space_4);
+            View rightSpace1 = mCurrentView.findViewById(R.id.right_space_1);
+            View rightSpace2 = mCurrentView.findViewById(R.id.right_space_2);
+            View rightSpace3 = mCurrentView.findViewById(R.id.right_space_3);
+            View rightSpace4 = mCurrentView.findViewById(R.id.right_space_4);
+            if (navBarPosition == 1) {
+                // Align left
+                setVisibleOrGone(leftSpace1, false);
+                setVisibleOrGone(leftSpace2, false);
+                setVisibleOrGone(leftSpace3, false);
+                setVisibleOrGone(leftSpace4, false);
+                setVisibleOrGone(rightSpace1, true);
+                setVisibleOrGone(rightSpace2, true);
+                setVisibleOrGone(rightSpace3, true);
+                setVisibleOrGone(rightSpace4, true);
+            } else if (navBarPosition == 2) {
+                // Align right
+                setVisibleOrGone(leftSpace1, true);
+                setVisibleOrGone(leftSpace2, true);
+                setVisibleOrGone(leftSpace3, true);
+                setVisibleOrGone(leftSpace4, true);
+                setVisibleOrGone(rightSpace1, false);
+                setVisibleOrGone(rightSpace2, false);
+                setVisibleOrGone(rightSpace3, false);
+                setVisibleOrGone(rightSpace4, false);
+            } else {
+                // Align centre
+                setVisibleOrGone(leftSpace1, true);
+                setVisibleOrGone(leftSpace2, true);
+                setVisibleOrGone(leftSpace3, true);
+                setVisibleOrGone(leftSpace4, true);
+                setVisibleOrGone(rightSpace1, true);
+                setVisibleOrGone(rightSpace2, true);
+                setVisibleOrGone(rightSpace3, true);
+                setVisibleOrGone(rightSpace4, true);
+            }
+        }
     }
 
     /**

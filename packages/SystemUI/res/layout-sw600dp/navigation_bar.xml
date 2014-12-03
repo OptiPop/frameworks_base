@@ -49,6 +49,7 @@
                 android:visibility="invisible"
                 />
             <Space 
+                android:id="@+id/left_space_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -81,6 +82,7 @@
                 android:contentDescription="@string/accessibility_recent"
                 />
             <Space 
+                android:id="@+id/right_space_1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -121,6 +123,7 @@
             android:visibility="gone"
             >
             <Space 
+                android:id="@+id/left_space_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -149,6 +152,7 @@
                 android:layout_weight="0"
                 />
             <Space 
+                android:id="@+id/right_space_2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -194,6 +198,7 @@
                 android:visibility="invisible"
                 />
             <Space 
+                android:id="@+id/left_space_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -226,6 +231,7 @@
                 android:contentDescription="@string/accessibility_recent"
                 />
             <Space 
+                android:id="@+id/right_space_3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -265,6 +271,7 @@
             android:visibility="gone"
             >
             <Space 
+                android:id="@+id/left_space_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -293,6 +300,7 @@
                 android:layout_weight="0"
                 />
             <Space 
+                android:id="@+id/right_space_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
