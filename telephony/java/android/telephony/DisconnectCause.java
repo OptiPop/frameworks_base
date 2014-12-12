@@ -161,6 +161,12 @@ public class DisconnectCause {
     public static final int OUTGOING_CANCELED = 44;
 
     /**
+     * Call was rejected due to number being blacklisted by user.
+     * {@@hide}
+     */
+    public static final int CALL_BLACKLISTED = 400;
+
+    /**
      * The call, which was an IMS call, disconnected because it merged with another call.
      */
     public static final int IMS_MERGED_SUCCESSFULLY = 45;
@@ -300,6 +306,8 @@ public class DisconnectCause {
             return "OUTGOING_FAILURE";
         case OUTGOING_CANCELED:
             return "OUTGOING_CANCELED";
+	case CALL_BLACKLISTED:
+            return "CALL_BLACKLISTED";
         case IMS_MERGED_SUCCESSFULLY:
             return "IMS_MERGED_SUCCESSFULLY";
         default:
