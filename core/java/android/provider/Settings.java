@@ -2784,6 +2784,12 @@ public final class Settings {
         public static final String EGG_MODE = "egg_mode";
 
         /**
+         * Boolean value on whether to show weather in the statusbar
+	 * @hide
+         */
+        public static final String STATUS_BAR_SHOW_WEATHER = "status_bar_show_weather";
+
+        /**
          * Show or hide clock
          * 0 - hide
          * 1 - show (default)
