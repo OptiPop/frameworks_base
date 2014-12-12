@@ -165,7 +165,7 @@ public final class ShutdownThread extends Thread {
                 if (isPrimary) {
                     if (!locked) {
                         // Include options in power menu for rebooting into recovery or bootloader
-                        sConfirmDialog = new AlertDialog.Builder(context)
+                        sConfirmDialog = new AlertDialog.Builder(context, AlertDialog.THEME_MATERIAL_DARK)
                                 .setTitle(titleResourceId)
                                 .setSingleChoiceItems(com.android.internal.R.array.shutdown_reboot_options, 0, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -204,7 +204,7 @@ public final class ShutdownThread extends Thread {
                 }
             }
             if (sConfirmDialog == null) {
-                sConfirmDialog = new AlertDialog.Builder(context)
+                sConfirmDialog = new AlertDialog.Builder(context, AlertDialog.THEME_MATERIAL_DARK)
                         .setTitle(titleResourceId)
                         .setMessage(resourceId)
                         .setPositiveButton(com.android.internal.R.string.yes, new DialogInterface.OnClickListener() {
@@ -286,7 +286,7 @@ public final class ShutdownThread extends Thread {
 
         // throw up an indeterminate system dialog to indicate radio is
         // shutting down.
-        ProgressDialog pd = new ProgressDialog(context);
+        ProgressDialog pd = new ProgressDialog(context, com.android.internal.R.style.Theme_Material_Dialog_Alert_Dark);
         if (mReboot) {
             pd.setTitle(context.getText(com.android.internal.R.string.reboot_system));
             pd.setMessage(context.getText(com.android.internal.R.string.reboot_progress));
