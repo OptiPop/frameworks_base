@@ -1570,6 +1570,7 @@ final class ActivityStack {
         mStackSupervisor.mGoingToSleepActivities.remove(next);
         next.sleeping = false;
         mStackSupervisor.mWaitingVisibleActivities.remove(next);
+        next.waitingVisible = false;
 
         if (DEBUG_SWITCH) Slog.v(TAG, "Resuming " + next);
 
@@ -2808,6 +2809,7 @@ final class ActivityStack {
         mStackSupervisor.mStoppingActivities.remove(r);
         mStackSupervisor.mGoingToSleepActivities.remove(r);
         mStackSupervisor.mWaitingVisibleActivities.remove(r);
+        r.waitingVisible = false;
         if (mResumedActivity == r) {
             mResumedActivity = null;
         }
@@ -3009,6 +3011,7 @@ final class ActivityStack {
         // down to the max limit while they are still waiting to finish.
         mStackSupervisor.mFinishingActivities.remove(r);
         mStackSupervisor.mWaitingVisibleActivities.remove(r);
+        r.waitingVisible = false;
 
         // Remove any pending results.
         if (r.finishing && r.pendingResults != null) {
