@@ -10007,7 +10007,12 @@ public class WindowManagerService extends IWindowManager.Stub
                 // Don't remove this window until rotation has completed.
                 continue;
             }
-            win.reportResized();
+            if (!win.reportResized()) {
+                mInnerFields.mOrientationChangeComplete = true;
+                if (DEBUG_ORIENTATION && mDisplayFrozen) Slog.v(TAG,
+                    "win: " + win + " Resize have exception, set orientationChangeComplete to "
+                    + mInnerFields.mOrientationChangeComplete);
+            }
             mResizingWindows.remove(i);
         }
 
