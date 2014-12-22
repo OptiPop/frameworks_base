@@ -1381,7 +1381,7 @@ final class WindowState implements WindowManagerPolicy.WindowState {
         }
     }
 
-    void reportResized() {
+    boolean reportResized() {
         try {
             if (DEBUG_RESIZE || DEBUG_ORIENTATION) Slog.v(TAG, "Reporting new frame to " + this
                     + ": " + mCompatFrame);
@@ -1432,10 +1432,25 @@ final class WindowState implements WindowManagerPolicy.WindowState {
             mVisibleInsetsChanged = false;
             mStableInsetsChanged = false;
             mWinAnimator.mSurfaceResized = false;
+            return true;
         } catch (RemoteException e) {
             mOrientationChanging = false;
+            if (DEBUG_RESIZE || DEBUG_ORIENTATION || DEBUG_CONFIGURATION) {
+                Slog.i(TAG, "Fail to resize window " + this + ": " + e);
+            }
+            mOverscanInsetsChanged = false;
+            mContentInsetsChanged = false;
+            mVisibleInsetsChanged = false;
+            mStableInsetsChanged = false;
+            mWinAnimator.mSurfaceResized = false;
+            mLastOverscanInsets.set(mOverscanInsets);
+            mLastContentInsets.set(mContentInsets);
+            mLastVisibleInsets.set(mVisibleInsets);
+            mLastStableInsets.set(mStableInsets);
+
             mLastFreezeDuration = (int)(SystemClock.elapsedRealtime()
                     - mService.mDisplayFreezeTime);
+            return false;
         }
     }
 
