@@ -41,6 +41,7 @@ public class QSConstants {
     public static final String TILE_SYNC = "sync";
     public static final String TILE_USB_TETHER = "usb_tether";
     public static final String TILE_SCREENSHOT = "screenshot";
+    public static final String TILE_VISUALIZER = "visualizer";
 
     protected static final ArrayList<String> TILES_AVAILABLE = new ArrayList<String>();
 
@@ -59,11 +60,12 @@ public class QSConstants {
         TILES_AVAILABLE.add(TILE_NFC);
         TILES_AVAILABLE.add(TILE_COMPASS);
         TILES_AVAILABLE.add(TILE_LTE);
-	TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);       
+        TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);       
         TILES_AVAILABLE.add(TILE_SCREEN_OFF);
         TILES_AVAILABLE.add(TILE_EXPANDED_DESKTOP);
-	TILES_AVAILABLE.add(TILE_SYNC);     
+        TILES_AVAILABLE.add(TILE_SYNC);     
         TILES_AVAILABLE.add(TILE_USB_TETHER);
         TILES_AVAILABLE.add(TILE_SCREENSHOT);
+        TILES_AVAILABLE.add(TILE_VISUALIZER);
     }
 }

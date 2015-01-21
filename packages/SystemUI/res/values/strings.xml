@@ -977,6 +977,9 @@
     <!-- Screenshot qs tile -->
     <string name="quick_settings_screenshot">Screenshot</string>
 
+    <!-- AuioFX qs tile -->
+    <string name="quick_settings_visualizer_label">AudioFX</string>
+
     <!-- Lockscreen shortcuts -->
     <string name="left_shortcut_hint">Swipe right for %1$s</string>
     <string name="right_shortcut_hint">Swipe left for %1$s</string>
