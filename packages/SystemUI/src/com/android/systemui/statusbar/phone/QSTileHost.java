@@ -43,6 +43,7 @@ import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.IntentTile;
 import com.android.systemui.qs.tiles.LocationTile;
 import com.android.systemui.qs.tiles.NfcTile;
+import com.android.systemui.qs.tiles.LteTile;
 import com.android.systemui.qs.tiles.NotificationsTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
@@ -280,7 +281,9 @@ public class QSTileHost implements QSTile.Host {
             case QSConstants.TILE_COMPASS:
                 return new CompassTile(this);
             case QSConstants.TILE_NFC:
-                return new NfcTile(this);
+                return new NfcTile(this);   
+            case QSConstants.TILE_LTE:
+                return new LteTile(this);
 	    case QSConstants.TILE_SCREEN_TIMEOUT:
                 return new ScreenTimeoutTile(this);
             default:

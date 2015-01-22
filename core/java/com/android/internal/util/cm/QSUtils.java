@@ -28,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.nfc.NfcAdapter;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import com.android.internal.telephony.PhoneConstants;
 
 import java.util.Iterator;
 import java.util.List;
@@ -64,13 +65,7 @@ public class QSUtils {
                 switch (tileKey) {
                     case QSConstants.TILE_CELLULAR:
                     case QSConstants.TILE_HOTSPOT:
-                    case QSConstants.TILE_DATA:
-                    case QSConstants.TILE_ROAMING:
-                    case QSConstants.TILE_APN:
                         removeTile = !deviceSupportsMobile;
-                        break;
-                    case QSConstants.TILE_DDS:
-                        removeTile = !deviceSupportsDdsSupported(context);
                         break;
                     case QSConstants.TILE_FLASHLIGHT:
                         removeTile = !deviceSupportsFlashLight(context);
@@ -95,11 +90,11 @@ public class QSUtils {
         }
     }
 
-    private static boolean deviceSupportsDdsSupported(Context context) {
-        TelephonyManager tm = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.isMultiSimEnabled()
-                && tm.getMultiSimConfiguration() == TelephonyManager.MultiSimVariants.DSDA;
+    public static boolean deviceSupportsLte(Context ctx) {
+        final TelephonyManager tm = (TelephonyManager)
+                ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        return (tm.getLteOnCdmaMode() == PhoneConstants.LTE_ON_CDMA_TRUE)
+                || tm.getLteOnGsmMode() != 0;
     }
 
     public static boolean deviceSupportsMobileData(Context ctx) {
