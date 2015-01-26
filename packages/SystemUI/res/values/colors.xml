@@ -77,17 +77,17 @@
     <color name="notification_legacy_background_color">#ff1a1a1a</color>
 
     <!-- The color of the material notification background -->
-    <color name="notification_material_background_color">@*android:color/darkkat_blue_grey</color>
+    <color name="notification_material_background_color">@*android:color/material_blue_grey</color>
 
     <!-- The color of the material notification background when dimmed -->
     <color name="notification_material_background_dimmed_color">#d41b1f23</color>
 
     <!-- The color of the material notification background when low priority -->
-    <color name="notification_material_background_low_priority_color">@*android:color/darkkat_blue_grey</color> <!-- To do darker/brighter  -->
+    <color name="notification_material_background_low_priority_color">@*android:color/material_blue_grey</color> <!-- To do darker/brighter  -->
 
     <!-- The color of the material notification background for media notifications when no custom
          color is specified -->
-    <color name="notification_material_background_media_default_color">@*android:color/darkkat_blue_grey</color>
+    <color name="notification_material_background_media_default_color">@*android:color/material_blue_grey</color>
 
     <!-- The color of the ripples on the untinted notifications -->
     <color name="notification_ripple_untinted_color">#28ffffff</color>
