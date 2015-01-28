@@ -134,4 +134,9 @@
      <!-- Floating action button -->
     <color name="fab_color">#ff009688</color>
     <color name="floating_action_button_icon_color">#ffffff</color>
+
+    <!-- Navigation ring shortcuts -->
+    <color name="navring_check_tint">@android:color/white</color>
+    <color name="navring_edit_fill">#FF558B2F</color>
+    <color name="navring_edit_tint">#FF689F38</color>
 </resources>
