@@ -28,7 +28,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:background="?android:attr/colorPrimary"
+            android:background="#000000"
             android:elevation="8dp"
             android:theme="?android:attr/actionBarTheme">
 
@@ -51,7 +51,7 @@
             android:id="@+id/container_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/material_grey_50"
+            android:background="#aa000000"
             android:elevation="8dp" />
 
     </LinearLayout>
@@ -63,13 +63,13 @@
         android:layout_gravity="start"
         android:orientation="vertical"
         android:elevation="16dp"
-        android:background="@*android:color/white">
+        android:background="#414345">
 
         <Toolbar
             android:id="@+id/roots_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:background="?android:attr/colorPrimary"
+            android:background="#aa000000"
             android:elevation="8dp"
             android:theme="?android:attr/actionBarTheme" />
 

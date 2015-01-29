@@ -43,6 +43,6 @@
         android:ellipsize="middle"
         android:textAlignment="viewStart"
         android:textAppearance="@android:style/TextAppearance.Material.Subhead"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="#000000" />
 
 </LinearLayout>

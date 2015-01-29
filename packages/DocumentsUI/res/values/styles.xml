@@ -18,10 +18,11 @@
 
     <style name="DialogWhenReallyLarge" parent="@android:style/Theme.DeviceDefault.Light" />
 
-    <style name="DocumentsTheme" parent="@style/DialogWhenReallyLarge">
+    <style name="DocumentsTheme" parent="android:Theme.Material">
+        <item name="android:colorBackground">@*android:drawable/darkkat_bg_blue_grey</item>
         <item name="android:actionBarWidgetTheme">@null</item>
         <item name="android:actionBarTheme">@*android:style/ThemeOverlay.Material.Dark.ActionBar</item>
-        <item name="android:actionBarPopupTheme">@*android:style/ThemeOverlay.Material.Light</item>
+        <item name="android:actionBarPopupTheme">@*android:style/ThemeOverlay.Material</item>
 
         <item name="android:colorPrimaryDark">@*android:color/material_blue_grey_900</item>
         <item name="android:colorPrimary">@*android:color/material_blue_grey_800</item>
