@@ -44,7 +44,7 @@
             android:paddingTop="8dp"
             android:textAlignment="viewStart"
             android:textAppearance="@android:style/TextAppearance.Material.Body1"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textColor="#ffffff" />
 
     </LinearLayout>
 

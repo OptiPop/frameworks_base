@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@android:id/title"
-        android:textColor="?android:attr/textColorTertiary"
+        android:textColor="#ffffff"
         style="?android:attr/listSeparatorTextViewStyle" />
 
 </FrameLayout>
