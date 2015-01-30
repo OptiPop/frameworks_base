@@ -18,14 +18,14 @@
     <color name="material_grey_50">#fffafafa</color>
     <color name="material_grey_300">#ffeeeeee</color>
 
-    <color name="item_doc_grid_background">#000000</color>
+    <color name="item_doc_grid_background">#21272B</color>
 
     <color name="item_doc_grid_protect_background">#88ffffff</color>
 
     <color name="item_doc_grid_overlay_activated">#88ffffff</color>
-    <color name="item_doc_grid_overlay_disabled">#88000000</color>
+    <color name="item_doc_grid_overlay_disabled">#8821272B</color>
 
-    <color name="item_doc_list_overlay_disabled">#88000000</color>
+    <color name="item_doc_list_overlay_disabled">#8821272B</color>
 
     <!-- 10% alpha of material_deep_teal_500 -->
     <color name="item_doc_list_background_activated">#1a009688</color>
