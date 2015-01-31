@@ -38,7 +38,7 @@ public class QSConstants {
     public static final String TILE_SCREEN_TIMEOUT = "screen_timeout";
     public static final String TILE_SCREEN_OFF = "screen_off";
     public static final String TILE_EXPANDED_DESKTOP = "expanded_desktop";
-   
+    public static final String TILE_SYNC = "sync";
 
     // Order matters
     protected static final ArrayList<String> TILES_DEFAULT = new ArrayList<String>();
@@ -67,5 +67,6 @@ public class QSConstants {
 	TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);       
         TILES_AVAILABLE.add(TILE_SCREEN_OFF);
         TILES_AVAILABLE.add(TILE_EXPANDED_DESKTOP);
+	TILES_AVAILABLE.add(TILE_SYNC);
     }
 }
