@@ -2223,4 +2223,8 @@
   <java-symbol type="id" name="option4" />
   <java-symbol type="id" name="option5" />
 
+  <java-symbol type="bool" name="useCameraInterface" />
+  <java-symbol type="string" name="flashDevice" />
+  <java-symbol type="integer" name="valueOff" />
+  <java-symbol type="integer" name="valueOn" />
 </resources>
