@@ -136,11 +136,6 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
     }
 
     @Override
-    public void handleLongClick() {
-        mHost.startSettingsActivity(SOUND_SETTINGS);
-    }
-
-    @Override
     protected void handleUpdateState(NotificationsState state, Object arg) {
         state.visible = true;
         state.zen = mZenController.getZen();
