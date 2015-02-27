@@ -50,6 +50,9 @@
     <color name="data_usage_graph_warning">#FFFFFFFF</color>
     <color name="status_bar_clock_color">#FFFFFFFF</color>
 
+    <!-- tint of the Visualizer tile -->
+    <color name="visualizer_fill_color">#96FFFFFF</color>
+
     <color name="qs_user_detail_icon_muted">#FFFFFFFF</color> <!-- not so muted after all -->
 
     <!-- Tint color for the content on the notification overflow card. -->
