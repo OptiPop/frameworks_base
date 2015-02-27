@@ -36,7 +36,6 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
             = new AnimationIcon(R.drawable.ic_signal_flashlight_enable_animation);
     private final AnimationIcon mDisable
             = new AnimationIcon(R.drawable.ic_signal_flashlight_disable_animation);
-    private final FlashlightController mFlashlightController;
 
     private final TorchManager mTorchManager;
     private long mWasLastOn;
@@ -79,12 +78,12 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
 
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
-     
-        if (arg instanceof UserBoolean) {
-            state.value = ((UserBoolean) arg).value;
-        }
         if (state.value) {
             mWasLastOn = SystemClock.uptimeMillis();
+        }
+
+        if (arg instanceof UserBoolean) {
+            state.value = ((UserBoolean) arg).value;
         }
 
         if (!state.value && mWasLastOn != 0) {
@@ -119,12 +118,12 @@ public class FlashlightTile extends QSTile<QSTile.BooleanState> implements
     }
 
     @Override
-    public void onFlashlightOff() {
+    public void onTorchOff() {
         refreshState(UserBoolean.BACKGROUND_FALSE);
     }
 
     @Override
-    public void onFlashlightError() {
+    public void onTorchError() {
         refreshState(UserBoolean.BACKGROUND_FALSE);
     }
 
