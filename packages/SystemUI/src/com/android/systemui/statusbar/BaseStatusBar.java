@@ -2183,8 +2183,9 @@ public abstract class BaseStatusBar extends SystemUI implements
                 && !accessibilityForcesLaunch
                 && mPowerManager.isScreenOn()
     	        && !isIMEShowing
-                && !keyguardIsShowing;
-                && !isExpanded;
+                && !keyguardIsShowing
+                && !isExpanded
+                && !zenBlocksHeadsUp;
 
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
@@ -2194,7 +2195,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         // its below our threshold priority, we might want to always display
         // notifications from certain apps
-        if (!isHighPriority && !isOngoing && !keyguardIsShowing && !isExpanded) {
+        if (!isHighPriority && !isOngoing && !keyguardIsShowing && !isExpanded && !zenBlocksHeadsUp && !isIMEShowing) {
             // However, we don't want to interrupt if we're in an application that is
             // in Do Not Disturb
             if (!isPackageInDnd(getTopLevelPackage())) {
