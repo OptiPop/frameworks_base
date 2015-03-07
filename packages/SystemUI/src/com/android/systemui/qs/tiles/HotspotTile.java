@@ -17,6 +17,7 @@
 package com.android.systemui.qs.tiles;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -29,7 +30,9 @@ import com.android.systemui.statusbar.policy.KeyguardMonitor;
 
 /** Quick settings tile: Hotspot **/
 public class HotspotTile extends QSTile<QSTile.BooleanState> {
-    private static final Intent WIRELESS_SETTINGS = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+    private static final Intent TETHER_SETTINGS = new Intent().setComponent(new ComponentName(
+            "com.android.settings", "com.android.settings.TetherSettings"));
+
     private final AnimationIcon mEnable =
             new AnimationIcon(R.drawable.ic_hotspot_enable_animation);
     private final AnimationIcon mDisable =
@@ -78,12 +81,12 @@ public class HotspotTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleSecondaryClick() {
-        mHost.startSettingsActivity(WIRELESS_SETTINGS);
+        mHost.startSettingsActivity(TETHER_SETTINGS);
     }
 
     @Override
     protected void handleLongClick() {
-        mHost.startSettingsActivity(WIRELESS_SETTINGS);
+        mHost.startSettingsActivity(TETHER_SETTINGS);
     }
 
     @Override
