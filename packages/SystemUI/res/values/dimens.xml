@@ -561,4 +561,10 @@
     <!-- Screen pinning inner nav bar outer circle size -->
     <dimen name="screen_pinning_nav_highlight_outer_size">84dp</dimen>
 
+    <!-- Floating action button -->
+    <dimen name="floating_action_button_height">54dp</dimen>
+    <dimen name="floating_action_button_width">54dp</dimen>
+    <dimen name="floating_action_button_translation_z">12dp</dimen>
+    <dimen name="floating_action_button_margin_side">42dp</dimen>
+    <dimen name="floating_action_button_margin_bottom">38dp</dimen>
 </resources>

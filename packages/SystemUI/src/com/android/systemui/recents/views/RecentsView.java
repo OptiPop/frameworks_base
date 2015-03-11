@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowInsets;
@@ -65,6 +66,7 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
     ArrayList<TaskStack> mStacks;
     View mSearchBar;
     RecentsViewCallbacks mCb;
+	View mFloatingButton;
 
     public RecentsView(Context context) {
         super(context);
@@ -289,6 +291,16 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         mConfig.getTaskStackBounds(width, height, mConfig.systemInsets.top,
                 mConfig.systemInsets.right, taskStackBounds);
 
+        if (mFloatingButton != null) {
+            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)
+                    mFloatingButton.getLayoutParams();
+            params.topMargin = taskStackBounds.top;
+            params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
+            mFloatingButton.setLayoutParams(params);
+        } else {
+            mFloatingButton.setVisibility(View.GONE);
+        }
+
         // Measure each TaskStackView with the full width and height of the window since the 
         // transition view is a child of that stack view
         int childCount = getChildCount();
@@ -303,6 +315,23 @@ public class RecentsView extends FrameLayout implements TaskStackView.TaskStackV
         }
 
         setMeasuredDimension(width, height);
+    }
+
+    public void noUserInteraction() {
+        if (mFloatingButton != null) {
+            mFloatingButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow () {
+        super.onAttachedToWindow();
+        mFloatingButton = ((View)getParent()).findViewById(R.id.floating_action_button);
+        mFloatingButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dismissAllTasksAnimated();
+            }
+        });
     }
 
     /**
