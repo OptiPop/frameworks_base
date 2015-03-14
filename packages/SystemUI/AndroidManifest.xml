@@ -314,7 +314,7 @@
         </activity>
 
         <activity android:name=".egg.LLandActivity"
-                  android:theme="@android:style/Theme.Material.Light.NoActionBar"
+                  android:theme="@android:style/Theme.Material.NoActionBar"
                   android:exported="true"
                   android:label="@string/lland"
                   android:hardwareAccelerated="true"
