@@ -363,7 +363,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private final class RebootAction extends SinglePressAction implements LongPressAction {
         private RebootAction() {
-            super(com.android.internal.R.drawable.ic_lock_power_off,
+            super(com.android.internal.R.drawable.ic_lock_power_reboot,
                 R.string.global_action_reboot);
         }
 
