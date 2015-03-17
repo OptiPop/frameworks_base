@@ -297,6 +297,9 @@ public class ImmersiveModeConfirmation {
     }
 
     private void handleShow() {
+        if (mClingWindow != null) {
+            return;
+        }
         if (DEBUG) Slog.d(TAG, "Showing immersive mode confirmation");
 
         mClingWindow = new ClingWindowView(mContext, mConfirm);
