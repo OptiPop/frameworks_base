@@ -89,7 +89,7 @@ public class VideoCallImpl extends VideoCall {
 
         @Override
         public void changeCallDataUsage(int dataUsage) {
-            mHandler.obtainMessage(MSG_CHANGE_CALL_DATA_USAGE, dataUsage).sendToTarget();
+            mHandler.obtainMessage(MSG_CHANGE_CALL_DATA_USAGE, dataUsage, 0).sendToTarget();
         }
 
         @Override
