@@ -183,6 +183,7 @@ public class QSTileView extends ViewGroup {
         }
         if (dual) {
             mTopBackgroundView.setOnClickListener(mClickPrimary);
+            mTopBackgroundView.setOnLongClickListener(mLongClick);
             setOnClickListener(null);
             setClickable(false);
             setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -210,7 +211,7 @@ public class QSTileView extends ViewGroup {
     }
 
     public void init(OnClickListener clickPrimary, OnClickListener clickSecondary,
-            OnLongClickListener longClick) {
+			OnLongClickListener longClick) {
         mClickPrimary = clickPrimary;
         mClickSecondary = clickSecondary;
         mLongClick = longClick;
