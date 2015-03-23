@@ -53,6 +53,11 @@ public class KeyguardStatusView extends GridLayout {
     //Set initial value to false to skip the above case.
     private boolean mEnableRefresh = false;
 
+    //On the first boot, keygard will start to receiver TIME_TICK intent.
+    //And onScreenTurnedOff will not get called if power off when keyguard is not started.
+    //Set initial value to false to skip the above case.
+    private boolean mEnableRefresh = false;
+
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
