@@ -844,13 +844,19 @@ public class PackageManagerService extends IPackageManager.Stub {
                         mContainerService = (IMediaContainerService) msg.obj;
                     }
                     if (mContainerService == null) {
-                        // Something seriously wrong. Bail out
-                        Slog.e(TAG, "Cannot bind to media container service");
-                        for (HandlerParams params : mPendingInstalls) {
-                            // Indicate service bind error
-                            params.serviceError();
+                        if (mBound) {
+                            // We have successfully connected to the service, but not yet got the object.
+                            Slog.w(TAG, "Wait for media container service object...");
+                            // do nothing
+                        } else {
+                            // Something seriously wrong. Bail out
+                            Slog.e(TAG, "Cannot bind to media container service");
+                            for (HandlerParams params : mPendingInstalls) {
+                                // Indicate service bind error
+                                params.serviceError();
+                            }
+                            mPendingInstalls.clear();
                         }
-                        mPendingInstalls.clear();
                     } else if (mPendingInstalls.size() > 0) {
                         HandlerParams params = mPendingInstalls.get(0);
                         if (params != null) {
