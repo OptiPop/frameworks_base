@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
 
-    private static final int DATABASE_VERSION = 123;
+    private static final int DATABASE_VERSION = 122;
 
     private Context mContext;
     private int mUserHandle;
@@ -1894,13 +1894,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	if (upgradeVersion < 120) {
-            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
-                    new String[] { Settings.Secure.VOLUME_LINK_NOTIFICATION }, true);
-
-            upgradeVersion = 120;
-        }
-
-	if (upgradeVersion < 121) {
             String[] qsTiles = new String[] {
                     Settings.Secure.QS_TILES,
                     Settings.Secure.QS_USE_MAIN_TILES
@@ -1908,25 +1901,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
                     qsTiles, true);
-            upgradeVersion = 121;
+            upgradeVersion = 120;
         }
 
-        if (upgradeVersion < 122) {
+        if (upgradeVersion < 121) {
             String[] settingsToMove = new String[] {
                     Settings.Secure.QS_SHOW_BRIGHTNESS_SLIDER,
             };
 
             moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
                     settingsToMove, true);
-            upgradeVersion = 122;
+            upgradeVersion = 121;
         }
 
-        if (upgradeVersion < 123) {
+        if (upgradeVersion < 122) {
             String[] settingsToMove = Settings.Secure.NAVIGATION_RING_TARGETS;
 
             moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
                     settingsToMove, true);
-            upgradeVersion = 123;
+            upgradeVersion = 122;
         }
 
         // *** Remember to update DATABASE_VERSION above!
