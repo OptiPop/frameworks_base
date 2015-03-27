@@ -42,10 +42,24 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
     private static final String TIMEOUT_ENTRIES_NAME = "screen_timeout_entries";
     private static final String TIMEOUT_VALUES_NAME = "screen_timeout_values";
     private static final String SETTINGS_PACKAGE_NAME = "com.android.settings";
+
+    private final AnimationIcon mShort =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_short_avd);
+    private final AnimationIcon mShortReverse =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_short_reverse_avd);
+    private final AnimationIcon mMedium =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_med_avd);
+    private final AnimationIcon mMediumReverse =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_med_reverse_avd);
+    private final AnimationIcon mLong =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_long_avd);
+    private final AnimationIcon mLongReverse =
+            new AnimationIcon(R.drawable.ic_qs_screen_timeout_long_reverse_avd);
+
     private String[] mEntries, mValues;
     private boolean mShowingDetail;
-    ArrayList<Drawable> mAnimationList
-            = new ArrayList<Drawable>();
+    ArrayList<Integer> mAnimationList
+            = new ArrayList<Integer>();
 
     public ScreenTimeoutTile(Host host) {
         super(host);
@@ -183,7 +197,7 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
 
         int newTimeout = getScreenTimeout();
 
-        Resources resources = mContext.getResources();
+        AnimationIcon d = null;
         Bucket nextBucket = Bucket.getBucket(newTimeout);
         Bucket previousBucket = Bucket.getBucket(state.previousTimeout);
 
@@ -192,19 +206,48 @@ public class ScreenTimeoutTile extends QSTile<ScreenTimeoutTile.TimeoutState> {
             case 15000:
             case 30000:
                 // Default
-                state.icon = ResourceIcon.get(R.drawable.ic_qs_screen_timeout_med_reverse_avd);
+                d = mMediumReverse;
+                if (nextBucket == Bucket.MEDIUM) {
+                    // Medium
+                    d = mShort;
+                } else if (nextBucket == Bucket.LARGE) {
+                    // Large
+                    d = mShortReverse;
+                }
                 break;
             case 60000:
             case 120000:
             case 300000:
                 // Default
-                state.icon = ResourceIcon.get(R.drawable.ic_qs_screen_timeout_short_avd);
+                d = mShort;
+                if (nextBucket == Bucket.SMALL) {
+                    // Small
+                    d = mMediumReverse;
+                } else if (nextBucket == Bucket.LARGE) {
+                    // Large
+                    d = mMedium;
+                }
                 break;
             case 600000:
             case 1800000:
-                state.icon = ResourceIcon.get(R.drawable.ic_qs_screen_timeout_med_avd);
+                d = mMedium;
+                if (nextBucket == Bucket.MEDIUM) {
+                    // Small
+                    d = mLongReverse;
+                } else if (nextBucket == Bucket.SMALL) {
+                    // Large
+                    d = mLong;
+                }
                 break;
         }
+
+        if (state.icon == null || previousBucket != nextBucket) {
+            if (arg instanceof Boolean && (Boolean) arg) {
+                d.setAllowAnimation(true);
+            }
+            state.icon = d;
+        }
+
         state.visible = true;
         state.label = makeTimeoutSummaryString(newTimeout);
         state.previousTimeout = newTimeout;

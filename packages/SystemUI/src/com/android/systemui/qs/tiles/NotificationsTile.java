@@ -140,18 +140,22 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
         state.visible = true;
         state.zen = mZenController.getZen();
         state.ringerMode = mAudioManager.getRingerMode();
+        state.icon = ResourceIcon.get(getNotificationIconId(state.zen, state.ringerMode));
         state.label = mContext.getString(R.string.quick_settings_notifications_label);
-        if (state.zen == Global.ZEN_MODE_NO_INTERRUPTIONS) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_zen_on);
-        } else if (state.zen == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS){
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_zen_important);
-        } else if (state.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_ringer_audible);
-        } else if (state.ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_ringer_vibrate);
-        } else if (state.ringerMode == AudioManager.RINGER_MODE_SILENT) {
-            state.icon = ResourceIcon.get(R.drawable.ic_qs_ringer_silent);
+    }
+
+    private int getNotificationIconId(int zenMode, int ringerMode) {
+        int retValue = R.drawable.ic_qs_ringer_audible;
+        if (zenMode == Global.ZEN_MODE_NO_INTERRUPTIONS) {
+            retValue = R.drawable.ic_qs_zen_on;
+        } else if (zenMode == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS){
+            retValue = R.drawable.ic_qs_zen_important;
+        } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            retValue = R.drawable.ic_qs_ringer_vibrate;
+        } else if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+            retValue = R.drawable.ic_qs_ringer_silent;
         }
+        return retValue;
     }
 
     private final ZenModeController.Callback mCallback = new ZenModeController.Callback() {
