@@ -1101,6 +1101,9 @@ public class Process {
     /** @hide */
     public static final native int[] getPidsForCommands(String[] cmds);
 
+    /** @hide */
+    public static final native int[] getListOfPids(boolean binderOnly, boolean nativeOnly);
+
     /**
      * Gets the total Pss value for a given process, in bytes.
      * 
