@@ -2216,4 +2216,10 @@
 
    <!-- Doze invert -->
   <java-symbol type="bool" name="config_invert_colors_on_doze" />
+
+  <!-- Flashlight notification -->
+  <java-symbol type="string" name="quick_settings_tile_flashlight_not_title" />
+  <java-symbol type="string" name="quick_settings_tile_flashlight_not_summary" />
+  <java-symbol type="drawable" name="ic_signal_flashlight_disable" />
+
 </resources>
