@@ -17859,7 +17859,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback,
     }
 
     /**
-     * Cancels any animations for this view.
+     * Cancels any animations for this view. onAnimationEnd will be called
+     * if there was a running animation.
+     *
+     * @see Animation.AnimationListener.onAnimationEnd()
      */
     public void clearAnimation() {
         if (mCurrentAnimation != null) {
