@@ -2221,4 +2221,7 @@
   <java-symbol type="string" name="global_action_screenshot" />
   <java-symbol type="drawable" name="ic_lock_settings" />
   <java-symbol type="drawable" name="ic_lock_user" />
+
+   <!-- Doze invert -->
+  <java-symbol type="bool" name="config_invert_colors_on_doze" />
 </resources>
