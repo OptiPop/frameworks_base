@@ -97,7 +97,9 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 		LOCAL_CFLAGS += -fvisibility=hidden
 	endif
 
-	LOCAL_CFLAGS += -fno-omit-frame-pointer -marm -mapcs
+	ifdef HWUI_COMPILE_FOR_PERF
+		LOCAL_CFLAGS += -fno-omit-frame-pointer -marm -mapcs
+	endif
 
 	# Defaults for ATRACE_TAG and LOG_TAG for libhwui
 	LOCAL_CFLAGS += -DATRACE_TAG=ATRACE_TAG_VIEW -DLOG_TAG=\"OpenGLRenderer\"
