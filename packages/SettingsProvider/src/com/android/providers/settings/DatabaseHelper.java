@@ -1840,7 +1840,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 116;
         }
 
-
         if (upgradeVersion < 117) {
             db.beginTransaction();
             try {
