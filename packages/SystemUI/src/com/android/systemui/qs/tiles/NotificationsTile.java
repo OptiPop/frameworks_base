@@ -61,7 +61,7 @@ public class NotificationsTile extends QSTile<NotificationsTile.NotificationsSta
     private static final int[] RINGERS = new int[] {
         AudioManager.RINGER_MODE_NORMAL,
         AudioManager.RINGER_MODE_VIBRATE,
-        AudioManager.RINGER_MODE_SILENT,
+        AudioManager.RINGER_MODE_NORMAL,
         AudioManager.RINGER_MODE_SILENT
     };
     private static final int[] ZENS = new int[] {
