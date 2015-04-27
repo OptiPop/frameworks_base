@@ -2223,4 +2223,8 @@
   <java-symbol type="string" name="quick_settings_tile_flashlight_not_summary" />
   <java-symbol type="drawable" name="ic_signal_flashlight_disable" />
 
+  <!-- global actions -->
+  <java-symbol type="id" name="option4" />
+  <java-symbol type="id" name="option5" />
+
 </resources>
