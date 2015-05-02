@@ -2169,9 +2169,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                 mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 
         boolean isIMEShowing = inputMethodManager.isImeShowing();
-        final KeyguardTouchDelegate keyguard = KeyguardTouchDelegate.getInstance(mContext);
-        boolean keyguardIsShowing = keyguard.isShowingAndNotOccluded()
-                && keyguard.isInputRestricted();
 
         boolean isExpanded = false;
             if (mStackScroller != null) {
@@ -2183,9 +2180,8 @@ public abstract class BaseStatusBar extends SystemUI implements
                 && !accessibilityForcesLaunch
                 && mPowerManager.isScreenOn()
     	        && !isIMEShowing
-                && !keyguardIsShowing
-                && !isExpanded
-                && !zenBlocksHeadsUp;
+                && !isExpanded;
+
 
         try {
             interrupt = interrupt && !mDreamManager.isDreaming();
@@ -2195,7 +2191,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
         // its below our threshold priority, we might want to always display
         // notifications from certain apps
-        if (!isHighPriority && !isOngoing && !keyguardIsShowing && !isExpanded && !zenBlocksHeadsUp && !isIMEShowing) {
+        if (!isHighPriority && !isOngoing && !isExpanded && !isIMEShowing) {
             // However, we don't want to interrupt if we're in an application that is
             // in Do Not Disturb
             if (!isPackageInDnd(getTopLevelPackage())) {
