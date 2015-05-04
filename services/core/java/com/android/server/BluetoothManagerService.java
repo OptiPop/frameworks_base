@@ -433,6 +433,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         Message msg = mHandler.obtainMessage(MESSAGE_GET_NAME_AND_ADDRESS);
         mHandler.sendMessage(msg);
     }
+
     public boolean enableNoAutoConnect()
     {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
@@ -456,6 +457,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
         return true;
 
     }
+
     public boolean enable() {
         if ((Binder.getCallingUid() != Process.SYSTEM_UID) &&
             (!checkIfCallerIsForegroundUser())) {
@@ -733,6 +735,7 @@ class BluetoothManagerService extends IBluetoothManager.Stub {
             msg.obj = this;
             mHandler.sendMessageDelayed(msg, TIMEOUT_BIND_MS);
         }
+    }
 
     private void sendBluetoothStateCallback(boolean isUp) {
         int n = mStateChangeCallbacks.beginBroadcast();
