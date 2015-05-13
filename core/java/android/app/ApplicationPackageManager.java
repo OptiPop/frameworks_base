@@ -1017,6 +1017,7 @@ final class ApplicationPackageManager extends PackageManager {
     }
 
     private void putCachedIcon(ResourceName name, Drawable dr) {
+        if (dr == null) return;
         synchronized (sSync) {
             sIconCache.put(name, new WeakReference<Drawable.ConstantState>(dr.getConstantState()));
             if (DEBUG_ICONS) Log.v(TAG, "Added cached drawable state for " + name + ": " + dr);
