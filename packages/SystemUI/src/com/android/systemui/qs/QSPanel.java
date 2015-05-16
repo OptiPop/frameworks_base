@@ -654,7 +654,7 @@ public class QSPanel extends ViewGroup {
         public void onAnimationEnd(Animator animation) {
             // Only hide content if still in detail state.
             if (mDetailRecord != null) {
-                setGridContentVisibility(false);
+                setGridContentVisibility(true);
             }
         }
     };
