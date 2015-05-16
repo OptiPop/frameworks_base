@@ -966,6 +966,10 @@
     <!-- Screen off qs tile -->
     <string name="quick_settings_screen_off">Screen off</string>
 
+    <!-- Expanded desktop qs tile -->
+    <string name="quick_settings_expanded_desktop">Expanded</string>
+    <string name="quick_settings_expanded_desktop_off">Normal</string>
+
     <!-- Lockscreen shortcuts -->
     <string name="left_shortcut_hint">Swipe right for %1$s</string>
     <string name="right_shortcut_hint">Swipe left for %1$s</string>
