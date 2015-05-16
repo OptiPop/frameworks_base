@@ -1037,6 +1037,15 @@ public class TelephonyManager {
         return retVal;
     }
 
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public static int getLteOnGsmModeStatic() {
+        return SystemProperties.getInt(TelephonyProperties.PROPERTY_LTE_ON_GSM_DEVICE,
+                    0);
+    }
+
     //
     //
     // Current Network
@@ -1350,6 +1359,17 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * {@hide}
+     */
+    public void toggleLTE(boolean on) {
+        try {
+            getITelephony().toggleLTE(on);
+        } catch (RemoteException e) {
+            //Silently fail
+        }
+    }
+
     /** Unknown network class. {@hide} */
     public static final int NETWORK_CLASS_UNKNOWN = 0;
     /** Class of broadly defined "2G" networks. {@hide} */
@@ -1553,9 +1573,7 @@ public class TelephonyManager {
             Rlog.d(TAG, "getSimState:- empty subId return SIM_STATE_ABSENT");
             return SIM_STATE_UNKNOWN;
         }
-        int simState = SubscriptionManager.getSimStateForSubscriber(subId[0]);
-        Rlog.d(TAG, "getSimState: simState=" + simState + " slotIdx=" + slotIdx);
-        return simState;
+        return SubscriptionManager.getSimStateForSubscriber(subId[0]);
     }
 
     /**
@@ -1605,7 +1623,6 @@ public class TelephonyManager {
                 }
             }
         }
-        Rlog.d(TAG, "getSimOperatorNumeric(): default subId=" + subId);
         return getSimOperatorNumericForSubscription(subId);
     }
 
@@ -1779,6 +1796,21 @@ public class TelephonyManager {
         } catch (NullPointerException ex) {
             // This could happen before phone restarts due to crashing
             return PhoneConstants.LTE_ON_CDMA_UNKNOWN;
+        }
+    }
+
+    /**
+     * Return if the current radio is LTE on GSM
+     * @hide
+     */
+    public int getLteOnGsmMode() {
+        try {
+            return getITelephony().getLteOnGsmMode();
+        } catch (RemoteException ex) {
+            return 0;
+        } catch (NullPointerException ex) {
+            // This could happen before phone restarts due to crashing
+            return 0;
         }
     }
 
