@@ -304,5 +304,10 @@
     <integer name="recents_animate_task_bar_enter_delay">275</integer>
     <!-- The min animation duration for animating the task bar out. -->
     <integer name="recents_animate_task_bar_exit_duration">125</integer>
+
+    <!-- Sensivity of pie gestures controlls.
+        Must be minimum 1 and maximum 10 (See @EdgeServiceConstants.java).
+        Default for pie is high sensivity -->
+    <integer name="pie_gesture_sensivity">8</integer>
 </resources>
 
