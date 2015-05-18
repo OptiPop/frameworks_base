@@ -3461,7 +3461,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
 
     public void showStatusBarCarrierLabel(boolean show) {
         if (mStatusBarView == null) return;
-        ContentResolver resolver = mContext.getContentResolver();
         View statusBarCarrierLabel = mStatusBarView.findViewById(R.id.status_bar_carrier_label);
         if (statusBarCarrierLabel != null) {
             statusBarCarrierLabel.setVisibility(show ? (mShowStatusBarCarrier ? View.VISIBLE : View.GONE) : View.GONE);
