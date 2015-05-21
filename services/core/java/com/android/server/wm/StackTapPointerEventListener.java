@@ -71,13 +71,15 @@ public class StackTapPointerEventListener implements PointerEventListener {
                 if (mPointerId == motionEvent.getPointerId(index)) {
                     final int x = (int)motionEvent.getX(index);
                     final int y = (int)motionEvent.getY(index);
-                    if ((motionEvent.getEventTime() - motionEvent.getDownTime())
-                            < TAP_TIMEOUT_MSEC
-                            && Math.abs(x - mDownX) < mMotionSlop
-                            && Math.abs(y - mDownY) < mMotionSlop
-                            && !mTouchExcludeRegion.contains(x, y)) {
-                        mService.mH.obtainMessage(H.TAP_OUTSIDE_STACK, x, y,
-                                mDisplayContent).sendToTarget();
+                    synchronized(this) {
+                        if ((motionEvent.getEventTime() - motionEvent.getDownTime())
+                                < TAP_TIMEOUT_MSEC
+                                && Math.abs(x - mDownX) < mMotionSlop
+                                && Math.abs(y - mDownY) < mMotionSlop
+                                && !mTouchExcludeRegion.contains(x, y)) {
+                            mService.mH.obtainMessage(H.TAP_OUTSIDE_STACK, x, y,
+                                    mDisplayContent).sendToTarget();
+                        }
                     }
                     mPointerId = -1;
                 }
