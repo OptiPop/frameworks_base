@@ -92,7 +92,7 @@ public class SurfaceView extends View {
 
     final int[] mLocation = new int[2];
 
-    final ReentrantLock mSurfaceLock = new ReentrantLock();
+    final ReentrantLock mSurfaceLock = new ReentrantLock(true);
     final Surface mSurface = new Surface();       // Current surface in use
     final Surface mNewSurface = new Surface();    // New surface we are switching to
     boolean mDrawingStopped = true;
