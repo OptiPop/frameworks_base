@@ -100,6 +100,22 @@ public class ScrollBarDrawable extends Drawable {
         mVertical = vertical;
     }
 
+    public boolean needDraw() {
+        final boolean vertical = mVertical;
+        final int extent = mExtent;
+        final int range = mRange;
+
+        boolean drawTrack = true;
+        boolean drawThumb = true;
+
+        if (extent <= 0 || range <= extent) {
+            drawTrack = vertical ? mAlwaysDrawVerticalTrack : mAlwaysDrawHorizontalTrack;
+            drawThumb = false;
+        }
+
+        return (drawTrack|| drawThumb);
+    }
+
     @Override
     public void draw(Canvas canvas) {
         final boolean vertical = mVertical;
