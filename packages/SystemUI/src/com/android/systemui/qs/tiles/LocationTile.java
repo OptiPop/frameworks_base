@@ -55,7 +55,6 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             new AnimationIcon(R.drawable.ic_signal_location_disable_animation);
 
     private final List<Integer> mLocationList = new ArrayList<>();
-
     private final LocationController mController;
     private final LocationDetailAdapter mDetailAdapter;
     private final KeyguardMonitor mKeyguard;
@@ -91,14 +90,14 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
 
     @Override
     protected void handleClick() {
-    if(mController.isAdvancedSettingsEnabled()) {
+        if(mController.isAdvancedSettingsEnabled()) {
             showDetail(true);
         } else {
             mController.setLocationEnabled(!mController.isLocationEnabled());
+        }
         mEnable.setAllowAnimation(true);
         mDisable.setAllowAnimation(true);
     }
-}
 
     @Override
     protected void handleSecondaryClick() {
@@ -136,7 +135,7 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
                 state.contentDescription = mContext.getString(
                         R.string.accessibility_quick_settings_location_gps_only);
-                state.icon = mEnable;              
+                state.icon = mEnable;
                 break;
             case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
                 state.contentDescription = mContext.getString(
@@ -146,6 +145,7 @@ public class LocationTile extends QSTile<QSTile.BooleanState> {
             default:
                 state.contentDescription = mContext.getString(
                         R.string.accessibility_quick_settings_location_on);
+                state.icon = mEnable;
         }
     }
 
