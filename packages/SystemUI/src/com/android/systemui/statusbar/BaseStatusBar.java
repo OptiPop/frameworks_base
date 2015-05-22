@@ -163,7 +163,6 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     // Search panel
     protected SearchPanelView mSearchPanelView;
-    private boolean mSearchPanelViewEnabled;
 
     protected int mCurrentUserId = 0;
     final protected SparseArray<UserInfo> mCurrentProfiles = new SparseArray<UserInfo>();
@@ -295,9 +294,6 @@ public abstract class BaseStatusBar extends SystemUI implements
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.HEADS_UP_BLACKLIST_VALUES),
                     false, this);
-            resolver.registerContentObserver(
-                    Settings.Secure.getUriFor(Settings.Secure.SEARCH_PANEL_ENABLED),
-                    false, this);
             update();
         }
 
@@ -314,9 +310,6 @@ public abstract class BaseStatusBar extends SystemUI implements
                     Settings.System.HEADS_UP_BLACKLIST_VALUES);
             splitAndAddToArrayList(mDndList, dndString, "\\|");
             splitAndAddToArrayList(mBlacklist, blackString, "\\|");
-
-            mSearchPanelViewEnabled = Settings.Secure.getInt(
-                    resolver, Settings.Secure.SEARCH_PANEL_ENABLED, 1) == 1;
         }
     };
 
@@ -1085,7 +1078,7 @@ public abstract class BaseStatusBar extends SystemUI implements
 
     @Override
     public void showSearchPanel() {
-        if (mSearchPanelView != null && mSearchPanelViewEnabled) {
+        if (mSearchPanelView != null && mSearchPanelView.isAssistantAvailable()) {
             mSearchPanelView.show(true, true);
         }
     }
