@@ -139,15 +139,9 @@ public final class AnimatorSet extends Animator {
     public void playTogether(Animator... items) {
         if (items != null) {
             mNeedsSort = true;
-            Builder builder = null;
-            for (Animator anim : items) {
-                if (anim != null) {
-                    if (builder == null) {
-                        builder = play(anim);
-                    } else {
-                        builder.with(anim);
-                    }
-                }
+            Builder builder = play(items[0]);
+            for (int i = 1; i < items.length; ++i) {
+                builder.with(items[i]);
             }
         }
     }
@@ -162,12 +156,10 @@ public final class AnimatorSet extends Animator {
             mNeedsSort = true;
             Builder builder = null;
             for (Animator anim : items) {
-                if (anim != null) {
-                    if (builder == null) {
-                        builder = play(anim);
-                    } else {
-                        builder.with(anim);
-                    }
+                if (builder == null) {
+                    builder = play(anim);
+                } else {
+                    builder.with(anim);
                 }
             }
         }
@@ -186,17 +178,8 @@ public final class AnimatorSet extends Animator {
                 play(items[0]);
             } else {
                 mReversible = false;
-                Animator lastAnim = null;
                 for (int i = 0; i < items.length - 1; ++i) {
-                    Animator anim = items[i];
-                    if (anim != null) {
-                        if (lastAnim == null) {
-                            play(anim);
-                        } else {
-                            play(lastAnim).before(anim);
-                        }
-                        lastAnim = anim;
-                    }
+                    play(items[i]).before(items[i+1]);
                 }
             }
         }
@@ -215,17 +198,8 @@ public final class AnimatorSet extends Animator {
                 play(items.get(0));
             } else {
                 mReversible = false;
-                Animator lastAnim = null;
-                for (int i = 0; i < items.size(); ++i) {
-                    Animator anim = items.get(i);
-                    if (anim != null) {
-                        if (lastAnim == null) {
-                            play(anim);
-                        } else {
-                            play(lastAnim).before(anim);
-                        }
-                        lastAnim = anim;
-                    }
+                for (int i = 0; i < items.size() - 1; ++i) {
+                    play(items.get(i)).before(items.get(i+1));
                 }
             }
         }
@@ -1187,10 +1161,8 @@ public final class AnimatorSet extends Animator {
             mCurrentNode = mNodeMap.get(anim);
             if (mCurrentNode == null) {
                 mCurrentNode = new Node(anim);
-                if (anim != null) {
-                    mNodeMap.put(anim, mCurrentNode);
-                    mNodes.add(mCurrentNode);
-                }
+                mNodeMap.put(anim, mCurrentNode);
+                mNodes.add(mCurrentNode);
             }
         }
 
@@ -1202,9 +1174,6 @@ public final class AnimatorSet extends Animator {
          * {@link AnimatorSet#play(Animator)} method starts.
          */
         public Builder with(Animator anim) {
-            if (anim == null) {
-                return this;
-            }
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -1226,11 +1195,6 @@ public final class AnimatorSet extends Animator {
          */
         public Builder before(Animator anim) {
             mReversible = false;
-
-            if (anim == null) {
-                return this;
-            }
-
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -1252,11 +1216,6 @@ public final class AnimatorSet extends Animator {
          */
         public Builder after(Animator anim) {
             mReversible = false;
-
-            if (anim == null) {
-                return this;
-            }
-
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
