@@ -1072,6 +1072,8 @@ public class VolumePanel extends Handler implements DemoMode {
         mTimeoutDelay = mDemoIcon != 0 ? TIMEOUT_DELAY_EXPANDED
                 : sSafetyWarning != null ? TIMEOUT_DELAY_SAFETY_WARNING
                 : mZenPanelExpanded ? TIMEOUT_DELAY_EXPANDED
+                : isZenPanelVisible() ? TIMEOUT_DELAY_COLLAPSED
+                : mActiveStreamType == AudioManager.STREAM_MUSIC ? TIMEOUT_DELAY_SHORT
                 : TIMEOUT_DELAY;
     }
 
