@@ -622,6 +622,9 @@ public class NetworkControllerImpl extends BroadcastReceiver
     void refreshCarrierLabel() {
         Context context = mContext;
 
+        String customCarrierLabel = Settings.System.getStringForUser(context.getContentResolver(),
+                Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
+
         WifiSignalController.WifiState wifiState = mWifiSignalController.getState();
         String label = "";
         for (MobileSignalController controller : mMobileSignalControllers.values()) {
@@ -653,6 +656,10 @@ public class NetworkControllerImpl extends BroadcastReceiver
                  !mEthernetConnected && !mHasMobileDataFeature) {
             // Pretty much no connection.
             label = context.getString(R.string.status_bar_settings_signal_meter_disconnected);
+        }
+
+        if (!TextUtils.isEmpty(customCarrierLabel)) {
+            label = customCarrierLabel;
         }
 
         // for mobile devices, we always show mobile connection info here (SPN/PLMN)
@@ -1327,8 +1334,6 @@ public class NetworkControllerImpl extends BroadcastReceiver
             } else {
                 mCurrentState.networkName = mNetworkNameDefault;
             }
-            String customCarrierLabel = Settings.System.getStringForUser(mContext.getContentResolver(),
-                    Settings.System.CUSTOM_CARRIER_LABEL, UserHandle.USER_CURRENT);
         }
 
         /**
